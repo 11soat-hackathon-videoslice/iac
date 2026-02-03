@@ -67,26 +67,6 @@ codebuild_projects = {
   "iac" = {
     codebuild_name  = "vdsc-prd-codebuild-iac"
     github_repo_url = "https://github.com/11soat-hackton-videoslice/iac"
-  },
-  "ms-failover" = {
-    codebuild_name  = "vdsc-prd-codebuild-failover"
-    github_repo_url = "https://github.com/11soat-hackton-videoslice/ms-video-failover"
-  },
-  "ms-status-management" = {
-    codebuild_name  = "vdsc-prd-codebuild-status-management"
-    github_repo_url = "https://github.com/11soat-hackton-videoslice/ms-status-management"
-  },
-  "ms-video-slice" = {
-    codebuild_name  = "vdsc-prd-codebuild-video-slice"
-    github_repo_url = "https://github.com/11soat-hackton-videoslice/ms-video-slice"
-  },
-  "ms-video-upload-url" = {
-    codebuild_name  = "vdsc-prd-codebuild-video-upload-url"
-    github_repo_url = "https://github.com/11soat-hackton-videoslice/ms-video-upload-url"
-  },
-  "ms-download-url" = {
-    codebuild_name  = "vdsc-prd-codebuild-download-url"
-    github_repo_url = "https://github.com/11soat-hackton-videoslice/ms-video-download-url"
   }
 }
 codebuild_compute_type = "BUILD_GENERAL1_SMALL"
