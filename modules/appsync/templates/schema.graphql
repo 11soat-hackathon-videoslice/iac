@@ -1,0 +1,54 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Mutation {
+  createNotification(input: CreateNotificationInput!): Notification @aws_iam
+  markAsRead(id: ID!, timestamp: String!): Notification @aws_api_key @aws_cognito_user_pools @aws_iam
+}
+
+type Notification @aws_api_key @aws_cognito_user_pools @aws_iam {
+  extentisonFile: String
+  fileName: String
+  id: ID!
+  isRead: Boolean
+  message: String
+  status: String
+  timestamp: String!
+  userId: String!
+  videoId: String
+}
+
+type NotificationConnection @aws_api_key @aws_cognito_user_pools @aws_iam {
+  items: [Notification]
+  nextToken: String
+}
+
+type Query {
+  getNotificationsByUser(isRead: Boolean, limit: Int, nextToken: String, sortDirection: ModelSortDirection, userId: ID!): NotificationConnection @aws_api_key @aws_cognito_user_pools @aws_iam
+}
+
+type Subscription {
+  #  O argumento userId permite que o frontend filtre apenas as notificações do dono da conta
+  onCreateNotification(userId: ID!): Notification @aws_api_key @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["createNotification"])
+  onUpdateNotification(notificatioId: ID!): Notification @aws_api_key @aws_cognito_user_pools @aws_iam @aws_subscribe(mutations : ["markAsRead"])
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+input CreateNotificationInput {
+  extentisonFile: String
+  fileName: String
+  id: ID!
+  isRead: Boolean
+  message: String!
+  status: String!
+  timestamp: String!
+  userId: String!
+  videoId: String
+}
