@@ -1,0 +1,39 @@
+#set($inputRoot = $input.path('$'))
+{
+    "TableName": "VideoSlice",
+    "Item": {
+        "videoId": { "S": "$inputRoot.videoId" },
+        "created": { "S": "$inputRoot.created.replace('T', ' ').replace('Z', '.0000Z')" },
+        "endTime": { "N": "$inputRoot.endTime" },
+        "fileName": { "S": "${inputRoot.fileName}" },
+        "fileExtension": { "S": "${inputRoot.fileExtension}" },
+        "maxRetries": { "N": "$inputRoot.maxRetries" },
+        "retries": { "N": "$inputRoot.retries" },
+        "userId": { "S": "$inputRoot.userId" },
+        "resize": { "S": "$inputRoot.resize" },
+        "qualityOutputLevel": { "N": "$inputRoot.qualityOutputLevel" },
+        "startTime": { "N": "$inputRoot.startTime" },
+        "status": { "S": "$inputRoot.status" },
+        "intervalTime": {
+            "L": [
+                #foreach($item in $inputRoot.intervalTime)
+                { "S": "$item" }#if($foreach.hasNext),#end
+                #end
+            ]
+        },
+        "totalTime": { "N": "$inputRoot.totalTime" },
+        "unitTime": { "S": "$inputRoot.unitTime" },
+        "logs": {
+            "L": [
+                #foreach($log in $inputRoot.logs)
+                {
+                    "M": {
+                        "timestamp": { "S": "$log.timestamp" },
+                        "info": { "S": "$log.info" }
+                    }
+                }#if($foreach.hasNext),#end
+                #end
+            ]
+        }
+    }
+}

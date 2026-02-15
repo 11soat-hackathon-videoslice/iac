@@ -1,0 +1,9 @@
+{
+    "TableName": "VideoSlice",
+    "IndexName": "userId",
+    "KeyConditionExpression": "userId = :userId",
+    "ExpressionAttributeValues": {
+        ":userId": {
+            "S": "$method.request.path.userId"
+        }
+    }

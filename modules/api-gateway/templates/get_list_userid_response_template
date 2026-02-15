@@ -12,7 +12,7 @@
     "unitTime": "$item.unitTime.S",
     "startTime": $item.startTime.N,
     "endTime": $item.endTime.N,
-    "timeInterval": [
+    "intervalTime": [
       #foreach($time in $item.intervalTime.L)
         "$time.S"#if($foreach.hasNext),#end
       #end
