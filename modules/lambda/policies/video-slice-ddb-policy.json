@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetShardIterator",
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:ListStreams"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:080145351546:table/VideoSliceIdempotencyTable",
+        "arn:aws:dynamodb:us-east-1:080145351546:table/VideoSlice",
+        "arn:aws:dynamodb:us-east-1:080145351546:table/VideoSlice/stream/*"
+      ],
+      "Sid": "VisualEditor0"
+    }
+  ]
+}

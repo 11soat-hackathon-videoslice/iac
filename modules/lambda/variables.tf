@@ -1,52 +1,72 @@
-#========================================================================================#
-#                                 CUSTOMER VARIABLES                                     #
-#========================================================================================#
-
-variable "prefix_name" {
-  description = "Prefix for resource names"
-  type        = string
+variable "lambda_functions" {
+  type = map(object({
+    function_name   = string
+    handler         = string
+    runtime         = string
+    memory_size     = number
+    timeout         = number
+    ephemeral_size  = number
+    description     = string
+    role_arn        = string
+    environment     = map(string)
+    zip_file        = string
+  }))
 }
 
-variable "environment_name" {
-  type        = string
-  description = "Environment name where Lambda will be provisioned. Allowed values: [prd | stg | qa | dev | labs | payer | devops]"
-  validation {
-    condition     = contains(["prd", "stg", "qa", "dev", "labs", "payer", "devops"], var.environment_name)
-    error_message = "Value must be 'prd', 'stg', 'qa', 'dev' or 'labs'."
-  }
+variable "lambda_aliases" {
+  type = map(object({
+    function_name    = string
+    alias_name       = string
+    function_version = string
+  }))
 }
 
-#========================================================================================#
-#                                 LAMBDA VARIABLES                                       #
-#========================================================================================#
-
-variable "function_name" {
-  description = "Name of the Lambda function"
-  type        = string
-  default     = "custom-authorizer"
+variable "lambda_event_mappings" {
+  type = map(object({
+    function_name    = string
+    event_source_arn = string
+    batch_size       = number
+    enabled          = bool
+    response_types   = list(string)
+  }))
 }
 
-variable "runtime" {
-  description = "Lambda runtime"
-  type        = string
-  default     = "python3.11"
+variable "lambda_invoke_configs" {
+  type = map(object({
+    function_name = string
+    dlq_arn       = string
+  }))
 }
 
-variable "handler" {
-  description = "Lambda handler"
-  type        = string
-  default     = "index.lambda_handler"
+variable "lambda_permissions" {
+  type = map(object({
+    function_name = string
+    statement_id  = string
+    principal     = string
+    source_arn    = string
+  }))
 }
 
-variable "timeout" {
-  description = "Lambda timeout in seconds"
-  type        = number
-  default     = 60
+variable "iam_roles" {
+  type = map(object({
+    role_name        = string
+    description      = string
+    path             = string
+    inline_policies  = map(string)
+    managed_policies = list(string)
+  }))
 }
 
-variable "environment_variables" {
-  description = "Environment variables for Lambda"
-  type        = map(string)
-  default     = {}
+variable "iam_policies" {
+  type = map(object({
+    policy_name = string
+    path        = string
+    description = string
+    policy_file = string
+  }))
 }
 
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

@@ -1,73 +1,39 @@
-output "api_id" {
-  description = "API Gateway ID"
-  value       = aws_apigatewayv2_api.api.id
+output "rest_api_id" {
+  value       = aws_api_gateway_rest_api.this.id
+  description = "API Gateway REST API ID"
 }
 
-output "api_endpoint" {
-  description = "API Gateway endpoint"
-  value       = aws_apigatewayv2_api.api.api_endpoint
+output "rest_api_arn" {
+  value       = aws_api_gateway_rest_api.this.arn
+  description = "API Gateway REST API ARN"
 }
 
-output "api_arn" {
-  description = "API Gateway ARN"
-  value       = aws_apigatewayv2_api.api.arn
+output "rest_api_root_resource_id" {
+  value       = aws_api_gateway_rest_api.this.root_resource_id
+  description = "API Gateway REST API root resource ID"
+}
+
+output "stage_name" {
+  value       = aws_api_gateway_stage.this.stage_name
+  description = "API Gateway Stage Name"
 }
 
 output "stage_arn" {
-  description = "API Gateway stage ARN"
-  value       = aws_apigatewayv2_stage.default.arn
+  value       = aws_api_gateway_stage.this.arn
+  description = "API Gateway Stage ARN"
 }
 
-output "execution_arn" {
-  description = "API Gateway execution ARN"
-  value       = aws_apigatewayv2_api.api.execution_arn
+output "invoke_url" {
+  value       = aws_api_gateway_stage.this.invoke_url
+  description = "API Gateway Invoke URL"
 }
 
-output "stage_id" {
-  description = "API Gateway stage ID"
-  value       = aws_apigatewayv2_stage.default.id
+output "authorizer_id" {
+  value       = aws_api_gateway_authorizer.this.id
+  description = "API Gateway Authorizer ID"
 }
 
-output "eks_vpc_link_id" {
-  description = "EKS VPC Link ID"
-  value       = aws_apigatewayv2_vpc_link.eks_vpc_link.id
-}
-
-output "eks_vpc_link_arn" {
-  description = "EKS VPC Link ARN"
-  value       = aws_apigatewayv2_vpc_link.eks_vpc_link.id
-}
-
-output "eks_nlb_id" {
-  description = "EKS NLB Integration ID"
-  value       = aws_apigatewayv2_integration.eks_nlb.id
-}
-
-output "lambda_authorizer_id" {
-  description = "Lambda Authorizer ID"
-  value       = aws_apigatewayv2_authorizer.lambda_integration.id
-}
-
-output "secured_routes_list" {
-  description = "Lista de todas as rotas protegidas criadas"
-  value = [
-    for route in aws_apigatewayv2_route.secured_route : {
-      id        = route.id
-      route_key = route.route_key
-      api_id    = route.api_id
-      target    = route.target
-    }
-  ]
-}
-
-output "open_routes_list" {
-  description = "Lista de todas as rotas abertas criadas"
-  value = [
-    for route in aws_apigatewayv2_route.open_route : {
-      id        = route.id
-      route_key = route.route_key
-      api_id    = route.api_id
-      target    = route.target
-    }
-  ]
+output "deployment_id" {
+  value       = aws_api_gateway_deployment.this.id
+  description = "API Gateway Deployment ID"
 }

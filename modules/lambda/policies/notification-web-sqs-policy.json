@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "sqs:DeleteMessage",
+        "sqs:ReceiveMessage",
+        "sqs:SendMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:sqs:us-east-1:080145351546:vdsc-*",
+      "Sid": "VisualEditor0"
+    }
+  ]
+}

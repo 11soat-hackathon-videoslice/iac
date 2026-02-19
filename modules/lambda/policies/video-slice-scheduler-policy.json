@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "scheduler:CreateSchedule",
+      "Effect": "Allow",
+      "Resource": "arn:aws:scheduler:us-east-1:080145351546:schedule/default/*"
+    },
+    {
+      "Action": "iam:PassRole",
+      "Condition": {
+        "StringLike": {
+          "iam:PassedToService": "scheduler.amazonaws.com"
+        }
+      },
+      "Effect": "Allow",
+      "Resource": "arn:aws:iam::080145351546:role/vdsc-prd-schduler-role"
+    }
+  ]
+}

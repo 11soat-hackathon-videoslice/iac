@@ -1,0 +1,50 @@
+name: Deploy Infrastructure
+
+env:
+  TERRAFORM_VERSION: 1.5.7
+  AWS_REGION: us-east-1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  terraform:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Validate AWS credentials
+      run: |
+        echo "🔍 Validating AWS configuration..."
+        aws sts get-caller-identity
+        echo "✅ AWS credentials configured correctly"
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -var-file="prd.tfvars" -out=tfplan
+
+    - name: Terraform Apply Refresh Only
+      if: github.ref == 'refs/heads/master'
+      run: terraform apply -refresh-only -var-file="prd.tfvars" -auto-approve

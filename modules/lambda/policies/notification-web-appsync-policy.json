@@ -1,0 +1,13 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "appsync:GraphQL",
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:appsync:us-east-1:080145351546:apis/fpnyilrnizchlghuhdghkvu3yy",
+        "arn:aws:appsync:us-east-1:080145351546:apis/fpnyilrnizchlghuhdghkvu3yy/*"
+      ]
+    }
+  ]
+}

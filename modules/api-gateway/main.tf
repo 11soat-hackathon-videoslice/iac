@@ -1,142 +1,156 @@
-#========================================================================================#
-#                                  API GATEWAY V2                                        #
-#========================================================================================#
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
-resource "aws_apigatewayv2_api" "api" {
-  name          = "${var.prefix_name}-${var.environment_name}-api-gateway"
-  protocol_type = "HTTP"
-  description   = "API Gateway HTTP v2 for ${var.prefix_name} ${var.environment_name}"
+# REST API
+resource "aws_api_gateway_rest_api" "this" {
+  name                         = var.api_name
+  disable_execute_api_endpoint = var.disable_execute_api_endpoint
+  tags                         = var.tags
 
-  cors_configuration {
-    allow_credentials = var.cors_configuration.allow_credentials
-    allow_headers     = var.cors_configuration.allow_headers
-    allow_methods     = var.cors_configuration.allow_methods
-    allow_origins     = var.cors_configuration.allow_origins
-    expose_headers    = var.cors_configuration.expose_headers
-    max_age           = var.cors_configuration.max_age
-  }
-
-  tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api"
-    Environment = var.environment_name
-    Owner       = "Fiap"
-    CostCenter  = "FinOps"
+  endpoint_configuration {
+    types = ["REGIONAL"]
   }
 }
 
-resource "aws_apigatewayv2_stage" "default" {
-  api_id      = aws_apigatewayv2_api.api.id
-  name        = "$default"
-  auto_deploy = true
+# Authorizer
+resource "aws_api_gateway_authorizer" "this" {
+  name                             = var.authorizer_name
+  rest_api_id                      = aws_api_gateway_rest_api.this.id
+  type                             = "COGNITO_USER_POOLS"
+  provider_arns                    = [var.cognito_user_pool_arn]
+  identity_source                  = "method.request.header.Authorization"
+  authorizer_result_ttl_in_seconds = 300
+}
 
-  default_route_settings {
-    throttling_burst_limit = var.throttle_settings.burst_limit
-    throttling_rate_limit  = var.throttle_settings.rate_limit
+# Resources
+resource "aws_api_gateway_resource" "root_proxy" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_rest_api.this.root_resource_id
+  path_part   = "{proxy+}"
+}
+
+resource "aws_api_gateway_resource" "video" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_rest_api.this.root_resource_id
+  path_part   = "video"
+}
+
+resource "aws_api_gateway_resource" "video_upload" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video.id
+  path_part   = "upload"
+}
+
+resource "aws_api_gateway_resource" "video_upload_url" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_upload.id
+  path_part   = "url"
+}
+
+resource "aws_api_gateway_resource" "video_upload_url_filename" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_upload_url.id
+  path_part   = "{fileName}"
+}
+
+resource "aws_api_gateway_resource" "video_list" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video.id
+  path_part   = "list"
+}
+
+resource "aws_api_gateway_resource" "video_list_user" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_list.id
+  path_part   = "user"
+}
+
+resource "aws_api_gateway_resource" "video_list_user_id" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_list_user.id
+  path_part   = "{userId}"
+}
+
+resource "aws_api_gateway_resource" "video_process" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video.id
+  path_part   = "process"
+}
+
+resource "aws_api_gateway_resource" "video_process_id" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_process.id
+  path_part   = "{videoId}"
+}
+
+resource "aws_api_gateway_resource" "video_notification" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video.id
+  path_part   = "notification"
+}
+
+resource "aws_api_gateway_resource" "video_notification_id" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+  parent_id   = aws_api_gateway_resource.video_notification.id
+  path_part   = "{userId}"
+}
+
+# Methods
+resource "aws_api_gateway_method" "upload_url_post" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.video_upload_url_filename.id
+  http_method   = "POST"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.this.id
+  request_parameters = {
+    "method.request.path.fileName" = true
   }
-
-  access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.api_gateway_prd.arn
-    format = jsonencode({
-      requestId      = "$context.requestId"
-      ip             = "$context.identity.sourceIp"
-      requestTime    = "$context.requestTime"
-      httpMethod     = "$context.httpMethod"
-      routeKey       = "$context.routeKey"
-      status         = "$context.status"
-      protocol       = "$context.protocol"
-      responseLength = "$context.responseLength"
-      error          = "$context.error.message"
-    })
-  }
-
-  tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api-stage"
-    Environment = var.environment_name
-    Owner       = "fiap"
-    CostCenter  = "FinOps"
-  }
-
 }
 
-#========================================================================================#
-#                          API INTEGRATION AND AUTHORIZATION                             #
-#========================================================================================#
-
-
-resource "aws_apigatewayv2_vpc_link" "eks_vpc_link" {
-  name               = "eks-vpc-link"
-  subnet_ids         = var.vpc_subnet_ids
-  security_group_ids = var.security_group_ids
+resource "aws_api_gateway_method" "process_post" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.video_process_id.id
+  http_method   = "POST"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.this.id
 }
 
-resource "aws_apigatewayv2_integration" "eks_nlb" {
-  api_id                 = aws_apigatewayv2_api.api.id
-  integration_type       = "HTTP_PROXY"
-  integration_method     = "ANY"
-  integration_uri        = var.eks_nlb_listener_arn
-  connection_type        = "VPC_LINK"
-  connection_id          = aws_apigatewayv2_vpc_link.eks_vpc_link.id
-  payload_format_version = "1.0"
+resource "aws_api_gateway_method" "upload_post" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.video_upload.id
+  http_method   = "POST"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.this.id
 }
 
-resource "aws_apigatewayv2_authorizer" "lambda_integration" {
-  api_id                            = aws_apigatewayv2_api.api.id
-  authorizer_type                   = "REQUEST"
-  authorizer_uri                    = "arn:aws:apigateway:${var.default_region}:lambda:path/2015-03-31/functions/${var.lambda_function_arn}/invocations"
-  identity_sources                  = ["$request.header.Authorization"]
-  name                              = "${var.prefix_name}-${var.environment_name}-api-custom-authorizer"
-  authorizer_payload_format_version = "2.0"
-  enable_simple_responses           = true
+resource "aws_api_gateway_method" "list_user_get" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  resource_id   = aws_api_gateway_resource.video_list_user_id.id
+  http_method   = "GET"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.this.id
 }
 
-resource "aws_apigatewayv2_route" "secured_route" {
-  for_each           = toset(var.authorization_routes)
-  api_id             = aws_apigatewayv2_api.api.id
-  route_key          = each.value
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.lambda_integration.id
-  target             = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
+# Deployment
+resource "aws_api_gateway_deployment" "this" {
+  rest_api_id = aws_api_gateway_rest_api.this.id
+
+  depends_on = [
+    aws_api_gateway_method.upload_url_post,
+    aws_api_gateway_method.process_post,
+    aws_api_gateway_method.upload_post,
+    aws_api_gateway_method.list_user_get
+  ]
 
   lifecycle {
-    ignore_changes = [route_key]
+    create_before_destroy = true
   }
 }
 
-resource "aws_apigatewayv2_route" "open_route" {
-  for_each  = toset(var.open_routes)
-  api_id    = aws_apigatewayv2_api.api.id
-  route_key = each.value
-  target    = "integrations/${aws_apigatewayv2_integration.eks_nlb.id}"
-
-  lifecycle {
-    ignore_changes = [route_key]
-  }
-}
-
-#========================================================================================#
-#                                  CLOUDWATCH LOGS                                      #
-#========================================================================================#
-
-resource "aws_cloudwatch_log_group" "api_gateway" {
-  name              = "/aws/apigateway/${var.prefix_name}-${var.environment_name}-api"
-  retention_in_days = 14
-
-  tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api-logs"
-    Environment = var.environment_name
-    Owner       = "fiap"
-    CostCenter  = "FinOps"
-  }
-}
-
-resource "aws_cloudwatch_log_group" "api_gateway_prd" {
-  name              = "/aws/apigateway/${var.prefix_name}-${var.environment_name}-api-prd"
-  retention_in_days = 30
-
-  tags = {
-    Name        = "${var.prefix_name}-${var.environment_name}-api-prd-logs"
-    Environment = var.environment_name
-    Owner       = "fiap"
-    CostCenter  = "FinOps"
-  }
+# Stage
+resource "aws_api_gateway_stage" "this" {
+  rest_api_id   = aws_api_gateway_rest_api.this.id
+  deployment_id = aws_api_gateway_deployment.this.id
+  stage_name    = var.stage_name
+  tags          = var.tags
 }

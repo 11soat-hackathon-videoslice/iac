@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "events:PutEvents",
+        "events:DescribeEventBus"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:events:us-east-1:080145351546:event-bus/default",
+        "arn:aws:events:us-east-1:080145351546:event-bus/vdsc-prd-event-bus"
+      ],
+      "Sid": "Statement1"
+    }
+  ]
+}

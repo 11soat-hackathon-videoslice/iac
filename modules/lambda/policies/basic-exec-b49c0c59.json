@@ -1,0 +1,20 @@
+{
+  "Statement": [
+    {
+      "Action": "logs:CreateLogGroup",
+      "Effect": "Allow",
+      "Resource": "arn:aws:logs:us-east-1:080145351546:*"
+    },
+    {
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:logs:us-east-1:080145351546:log-group:/aws/lambda/vdsc-prd-lmb-video-slice:*"
+      ]
+    }
+  ],
+  "Version": "2012-10-17"
+}

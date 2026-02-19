@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendRawEmail",
+        "ses:SendTemplatedEmail"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:ses:us-east-1:080145351546:identity/titoparizotto@gmail.com"
+      ]
+    }
+  ]
+}
