@@ -846,3 +846,9 @@ variable "lambda_url_generator_s3_bucket_dir_finished" {
   description = "S3 bucket finished directory for url-generator Lambda"
   default     = ""
 }
+
+variable "amplify_tags" {
+  type        = map(string)
+  description = "Tags to apply to Amplify resources"
+  default     = {}
+}
