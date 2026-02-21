@@ -583,6 +583,78 @@ variable "amplify_environment_variables" {
   default     = {}
 }
 
+variable "react_app_api_download_url" {
+  type        = string
+  description = "React App API Download URL"
+  default     = ""
+}
+
+variable "react_app_api_gateway_url" {
+  type        = string
+  description = "React App API Gateway URL"
+  default     = ""
+}
+
+variable "react_app_api_list_by_user_id" {
+  type        = string
+  description = "React App API List by User ID"
+  default     = ""
+}
+
+variable "react_app_api_upload_metadata" {
+  type        = string
+  description = "React App API Upload Metadata"
+  default     = ""
+}
+
+variable "react_app_api_upload_url" {
+  type        = string
+  description = "React App API Upload URL"
+  default     = ""
+}
+
+variable "react_app_appsync_endpoint" {
+  type        = string
+  description = "React App AppSync Endpoint"
+  default     = ""
+}
+
+variable "react_app_aws_region" {
+  type        = string
+  description = "React App AWS Region"
+  default     = ""
+}
+
+variable "react_app_dynamodb_table_name" {
+  type        = string
+  description = "React App DynamoDB Table Name"
+  default     = ""
+}
+
+variable "react_app_max_images" {
+  type        = string
+  description = "React App Max Images"
+  default     = ""
+}
+
+variable "react_app_max_retry" {
+  type        = string
+  description = "React App Max Retry"
+  default     = ""
+}
+
+variable "react_app_user_pool_client_id" {
+  type        = string
+  description = "React App User Pool Client ID"
+  default     = ""
+}
+
+variable "react_app_user_pool_id" {
+  type        = string
+  description = "React App User Pool ID"
+  default     = ""
+}
+
 variable "amplify_enable_branch_auto_build" {
   type        = bool
   description = "Enable automatic build on branch push"
@@ -595,8 +667,182 @@ variable "amplify_enable_basic_auth" {
   default     = false
 }
 
-variable "amplify_tags" {
-  type        = map(string)
-  description = "Tags to apply to Amplify resources"
-  default     = {}
+variable "lambda_notification_web_appsync_url" {
+  type        = string
+  description = "AppSync URL for notification-web Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_web_log_level" {
+  type        = string
+  description = "Log level for notification-web Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_aws_region" {
+  type        = string
+  description = "AWS Region for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_s3_bucket_name" {
+  type        = string
+  description = "S3 bucket name for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_event_bus_name" {
+  type        = string
+  description = "Event bus name for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_dynamodb_table_name" {
+  type        = string
+  description = "DynamoDB table name for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_dir_uploads" {
+  type        = string
+  description = "Uploads directory for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_dir_finished" {
+  type        = string
+  description = "Finished directory for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_dir_tmp" {
+  type        = string
+  description = "Temp directory for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_max_workers" {
+  type        = string
+  description = "Max workers for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_retry_backoff_factor" {
+  type        = string
+  description = "Retry backoff factor for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_role_arn" {
+  type        = string
+  description = "Schedule event role ARN for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_dlq" {
+  type        = string
+  description = "Schedule event DLQ for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_log_level" {
+  type        = string
+  description = "Log level for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_powertools_service_name" {
+  type        = string
+  description = "Powertools service name for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_video_slice_powertools_metrics_namespace" {
+  type        = string
+  description = "Powertools metrics namespace for video-slice Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_cognito_user_pool" {
+  type        = string
+  description = "Cognito User Pool for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_aws_region" {
+  type        = string
+  description = "AWS Region for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_from_email" {
+  type        = string
+  description = "From email for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_logo_url" {
+  type        = string
+  description = "Logo URL for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_dashboard_url" {
+  type        = string
+  description = "Dashboard URL for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_timezone" {
+  type        = string
+  description = "Timezone for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_notification_email_template" {
+  type        = string
+  description = "Email template path for notification-email Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_aws_region" {
+  type        = string
+  description = "AWS Region for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_signature_version" {
+  type        = string
+  description = "S3 signature version for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_bucket_name" {
+  type        = string
+  description = "S3 bucket name for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_url_download_expiration" {
+  type        = string
+  description = "S3 URL download expiration for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_url_upload_expiration" {
+  type        = string
+  description = "S3 URL upload expiration for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_bucket_dir_uploads" {
+  type        = string
+  description = "S3 bucket uploads directory for url-generator Lambda"
+  default     = ""
+}
+
+variable "lambda_url_generator_s3_bucket_dir_finished" {
+  type        = string
+  description = "S3 bucket finished directory for url-generator Lambda"
+  default     = ""
 }

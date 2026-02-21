@@ -111,7 +111,7 @@ module "eventbridge" {
 module "lambda" {
   source = "./modules/lambda"
 
-  lambda_functions       = var.lambda_functions
+  lambda_functions       = local.lambda_functions_with_env
   lambda_aliases         = var.lambda_aliases
   lambda_event_mappings  = var.lambda_event_mappings
   lambda_invoke_configs  = var.lambda_invoke_configs
@@ -159,7 +159,20 @@ module "amplify" {
   app_name                  = var.amplify_app_name
   repository                = var.amplify_repository
   iam_service_role_arn      = var.amplify_iam_service_role_arn
-  environment_variables     = var.amplify_environment_variables
+  environment_variables     = merge(var.amplify_environment_variables, {
+    REACT_APP_API_DOWNLOAD_URL    = var.react_app_api_download_url
+    REACT_APP_API_GATEWAY_URL     = var.react_app_api_gateway_url
+    REACT_APP_API_LIST_BY_USER_ID = var.react_app_api_list_by_user_id
+    REACT_APP_API_UPLOAD_METADATA = var.react_app_api_upload_metadata
+    REACT_APP_API_UPLOAD_URL      = var.react_app_api_upload_url
+    REACT_APP_APPSYNC_ENDPOINT    = var.react_app_appsync_endpoint
+    REACT_APP_AWS_REGION          = var.react_app_aws_region
+    REACT_APP_DYNAMODB_TABLE_NAME = var.react_app_dynamodb_table_name
+    REACT_APP_MAX_IMAGES          = var.react_app_max_images
+    REACT_APP_MAX_RETRY           = var.react_app_max_retry
+    REACT_APP_USER_POOL_CLIENT_ID = var.react_app_user_pool_client_id
+    REACT_APP_USER_POOL_ID        = var.react_app_user_pool_id
+  })
   enable_branch_auto_build  = var.amplify_enable_branch_auto_build
   enable_basic_auth         = var.amplify_enable_basic_auth
   tags                      = var.amplify_tags

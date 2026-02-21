@@ -114,7 +114,7 @@ lambda_functions = {
     ephemeral_size = 10240
     description    = "vdsc-prd-lmb-video-slice-config"
     role_arn       = "arn:aws:iam::080145351546:role/service-role/vdsc-prd-lmb-video-slice-role"
-    environment    = { AWS_LAMBDA_LOG_LEVEL = "DEBUG" }
+    environment    = {}
     zip_file       = "modules/lambda/source/aws_lambda_function__vdsc-prd-lmb-video-slice.zip"
   }
   notification-email = {
@@ -138,7 +138,7 @@ lambda_functions = {
     ephemeral_size = 512
     description    = "vdsc-prd-lmb-notification-web-config"
     role_arn       = "arn:aws:iam::080145351546:role/vdsc-prd-lmb-notification-web-role"
-    environment    = { APPSYNC_URL = "https://tcen4z5szzgstgtk6dn2pgbkli.appsync-api.us-east-1.amazonaws.com/graphql", AWS_LAMBDA_LOG_LEVEL = "DEBUG" }
+    environment    = {}
     zip_file       = "modules/lambda/source/aws_lambda_function__vdsc-prd-lmb-notification-web.zip"
   }
   url-generator = {
@@ -150,7 +150,7 @@ lambda_functions = {
     ephemeral_size = 512
     description    = "vdsc-prd-lmb-video-url-generator-config"
     role_arn       = "arn:aws:iam::080145351546:role/service-role/vdsc-prd-lmb-url-generator-role"
-    environment    = { AWS_LAMBDA_LOG_LEVEL = "INFO" }
+    environment    = {}
     zip_file       = "modules/lambda/source/aws_lambda_function__vdsc-prd-lmb-video-url-generator.zip"
   }
 }
@@ -399,18 +399,5 @@ amplify_repository                = "https://github.com/11soat-hackathon-videosl
 amplify_iam_service_role_arn      = "arn:aws:iam::080145351546:role/vdsc-prd-amplify-web-app-role"
 amplify_enable_branch_auto_build  = false
 amplify_enable_basic_auth         = false
-amplify_environment_variables = {
-  REACT_APP_API_DOWNLOAD_URL    = "/video/download/url"
-  REACT_APP_API_GATEWAY_URL     = "https://fj8aqi31jh.execute-api.us-east-1.amazonaws.com/prd"
-  REACT_APP_API_LIST_BY_USER_ID = "/video/list/userId"
-  REACT_APP_API_UPLOAD_METADATA = "/video/upload"
-  REACT_APP_API_UPLOAD_URL      = "/video/upload/url"
-  REACT_APP_APPSYNC_ENDPOINT    = "https://tcen4z5szzgstgtk6dn2pgbkli.appsync-api.us-east-1.amazonaws.com/graphql"
-  REACT_APP_AWS_REGION          = "us-east-1"
-  REACT_APP_DYNAMODB_TABLE_NAME = "VideoSlice"
-  REACT_APP_MAX_IMAGES          = "300"
-  REACT_APP_MAX_RETRY           = "3"
-  REACT_APP_USER_POOL_CLIENT_ID = "45ktgo9r8mk8qg3f8nfnqk1utq"
-  REACT_APP_USER_POOL_ID        = "us-east-1_D05wBn3u7"
-}
+amplify_environment_variables = {}
 amplify_tags = {}

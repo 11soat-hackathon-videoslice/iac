@@ -47,8 +47,94 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
+      env:
+        TF_VAR_react_app_api_download_url: ${{ vars.REACT_APP_API_DOWNLOAD_URL }}
+        TF_VAR_react_app_api_gateway_url: ${{ vars.REACT_APP_API_GATEWAY_URL }}
+        TF_VAR_react_app_api_list_by_user_id: ${{ vars.REACT_APP_API_LIST_BY_USER_ID }}
+        TF_VAR_react_app_api_upload_metadata: ${{ vars.REACT_APP_API_UPLOAD_METADATA }}
+        TF_VAR_react_app_api_upload_url: ${{ vars.REACT_APP_API_UPLOAD_URL }}
+        TF_VAR_react_app_appsync_endpoint: ${{ vars.REACT_APP_APPSYNC_ENDPOINT }}
+        TF_VAR_react_app_aws_region: ${{ vars.REACT_APP_AWS_REGION }}
+        TF_VAR_react_app_dynamodb_table_name: ${{ vars.REACT_APP_DYNAMODB_TABLE_NAME }}
+        TF_VAR_react_app_max_images: ${{ vars.REACT_APP_MAX_IMAGES }}
+        TF_VAR_react_app_max_retry: ${{ vars.REACT_APP_MAX_RETRY }}
+        TF_VAR_react_app_user_pool_client_id: ${{ vars.REACT_APP_USER_POOL_CLIENT_ID }}
+        TF_VAR_react_app_user_pool_id: ${{ vars.REACT_APP_USER_POOL_ID }}
+        TF_VAR_lambda_notification_web_appsync_url: ${{ vars.LAMBDA_NOTIFICATION_WEB_APPSYNC_URL }}
+        TF_VAR_lambda_notification_web_log_level: ${{ vars.LAMBDA_NOTIFICATION_WEB_LOG_LEVEL }}
+        TF_VAR_lambda_video_slice_aws_region: ${{ vars.LAMBDA_VIDEO_SLICE_AWS_REGION }}
+        TF_VAR_lambda_video_slice_s3_bucket_name: ${{ vars.LAMBDA_VIDEO_SLICE_S3_BUCKET_NAME }}
+        TF_VAR_lambda_video_slice_event_bus_name: ${{ vars.LAMBDA_VIDEO_SLICE_EVENT_BUS_NAME }}
+        TF_VAR_lambda_video_slice_dynamodb_table_name: ${{ vars.LAMBDA_VIDEO_SLICE_DYNAMODB_TABLE_NAME }}
+        TF_VAR_lambda_video_slice_dir_uploads: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_UPLOADS }}
+        TF_VAR_lambda_video_slice_dir_finished: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_FINISHED }}
+        TF_VAR_lambda_video_slice_dir_tmp: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_TMP }}
+        TF_VAR_lambda_video_slice_max_workers: ${{ vars.LAMBDA_VIDEO_SLICE_MAX_WORKERS }}
+        TF_VAR_lambda_video_slice_retry_backoff_factor: ${{ vars.LAMBDA_VIDEO_SLICE_RETRY_BACKOFF_FACTOR }}
+        TF_VAR_lambda_video_slice_role_arn: ${{ vars.LAMBDA_VIDEO_SLICE_ROLE_ARN }}
+        TF_VAR_lambda_video_slice_dlq: ${{ vars.LAMBDA_VIDEO_SLICE_DLQ }}
+        TF_VAR_lambda_video_slice_log_level: ${{ vars.LAMBDA_VIDEO_SLICE_LOG_LEVEL }}
+        TF_VAR_lambda_video_slice_powertools_service_name: ${{ vars.LAMBDA_VIDEO_SLICE_POWERTOOLS_SERVICE_NAME }}
+        TF_VAR_lambda_video_slice_powertools_metrics_namespace: ${{ vars.LAMBDA_VIDEO_SLICE_POWERTOOLS_METRICS_NAMESPACE }}
+        TF_VAR_lambda_notification_email_cognito_user_pool: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_COGNITO_USER_POOL }}
+        TF_VAR_lambda_notification_email_aws_region: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_AWS_REGION }}
+        TF_VAR_lambda_notification_email_from_email: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_FROM_EMAIL }}
+        TF_VAR_lambda_notification_email_logo_url: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_LOGO_URL }}
+        TF_VAR_lambda_notification_email_dashboard_url: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_DASHBOARD_URL }}
+        TF_VAR_lambda_notification_email_timezone: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_TIMEZONE }}
+        TF_VAR_lambda_notification_email_template: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_TEMPLATE }}
+        TF_VAR_lambda_url_generator_aws_region: ${{ vars.LAMBDA_URL_GENERATOR_AWS_REGION }}
+        TF_VAR_lambda_url_generator_s3_signature_version: ${{ vars.LAMBDA_URL_GENERATOR_S3_SIGNATURE_VERSION }}
+        TF_VAR_lambda_url_generator_s3_bucket_name: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_NAME }}
+        TF_VAR_lambda_url_generator_s3_url_download_expiration: ${{ vars.LAMBDA_URL_GENERATOR_S3_URL_DOWNLOAD_EXPIRATION }}
+        TF_VAR_lambda_url_generator_s3_url_upload_expiration: ${{ vars.LAMBDA_URL_GENERATOR_S3_URL_UPLOAD_EXPIRATION }}
+        TF_VAR_lambda_url_generator_s3_bucket_dir_uploads: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_DIR_UPLOADS }}
+        TF_VAR_lambda_url_generator_s3_bucket_dir_finished: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_DIR_FINISHED }}
       run: terraform plan -var-file="prd.tfvars" -out=tfplan
 
     - name: Terraform Apply Refresh Only
       if: github.ref == 'refs/heads/master'
+      env:
+        TF_VAR_react_app_api_download_url: ${{ vars.REACT_APP_API_DOWNLOAD_URL }}
+        TF_VAR_react_app_api_gateway_url: ${{ vars.REACT_APP_API_GATEWAY_URL }}
+        TF_VAR_react_app_api_list_by_user_id: ${{ vars.REACT_APP_API_LIST_BY_USER_ID }}
+        TF_VAR_react_app_api_upload_metadata: ${{ vars.REACT_APP_API_UPLOAD_METADATA }}
+        TF_VAR_react_app_api_upload_url: ${{ vars.REACT_APP_API_UPLOAD_URL }}
+        TF_VAR_react_app_appsync_endpoint: ${{ vars.REACT_APP_APPSYNC_ENDPOINT }}
+        TF_VAR_react_app_aws_region: ${{ vars.REACT_APP_AWS_REGION }}
+        TF_VAR_react_app_dynamodb_table_name: ${{ vars.REACT_APP_DYNAMODB_TABLE_NAME }}
+        TF_VAR_react_app_max_images: ${{ vars.REACT_APP_MAX_IMAGES }}
+        TF_VAR_react_app_max_retry: ${{ vars.REACT_APP_MAX_RETRY }}
+        TF_VAR_react_app_user_pool_client_id: ${{ vars.REACT_APP_USER_POOL_CLIENT_ID }}
+        TF_VAR_react_app_user_pool_id: ${{ vars.REACT_APP_USER_POOL_ID }}
+        TF_VAR_lambda_notification_web_appsync_url: ${{ vars.LAMBDA_NOTIFICATION_WEB_APPSYNC_URL }}
+        TF_VAR_lambda_notification_web_log_level: ${{ vars.LAMBDA_NOTIFICATION_WEB_LOG_LEVEL }}
+        TF_VAR_lambda_video_slice_aws_region: ${{ vars.LAMBDA_VIDEO_SLICE_AWS_REGION }}
+        TF_VAR_lambda_video_slice_s3_bucket_name: ${{ vars.LAMBDA_VIDEO_SLICE_S3_BUCKET_NAME }}
+        TF_VAR_lambda_video_slice_event_bus_name: ${{ vars.LAMBDA_VIDEO_SLICE_EVENT_BUS_NAME }}
+        TF_VAR_lambda_video_slice_dynamodb_table_name: ${{ vars.LAMBDA_VIDEO_SLICE_DYNAMODB_TABLE_NAME }}
+        TF_VAR_lambda_video_slice_dir_uploads: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_UPLOADS }}
+        TF_VAR_lambda_video_slice_dir_finished: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_FINISHED }}
+        TF_VAR_lambda_video_slice_dir_tmp: ${{ vars.LAMBDA_VIDEO_SLICE_DIR_TMP }}
+        TF_VAR_lambda_video_slice_max_workers: ${{ vars.LAMBDA_VIDEO_SLICE_MAX_WORKERS }}
+        TF_VAR_lambda_video_slice_retry_backoff_factor: ${{ vars.LAMBDA_VIDEO_SLICE_RETRY_BACKOFF_FACTOR }}
+        TF_VAR_lambda_video_slice_role_arn: ${{ vars.LAMBDA_VIDEO_SLICE_ROLE_ARN }}
+        TF_VAR_lambda_video_slice_dlq: ${{ vars.LAMBDA_VIDEO_SLICE_DLQ }}
+        TF_VAR_lambda_video_slice_log_level: ${{ vars.LAMBDA_VIDEO_SLICE_LOG_LEVEL }}
+        TF_VAR_lambda_video_slice_powertools_service_name: ${{ vars.LAMBDA_VIDEO_SLICE_POWERTOOLS_SERVICE_NAME }}
+        TF_VAR_lambda_video_slice_powertools_metrics_namespace: ${{ vars.LAMBDA_VIDEO_SLICE_POWERTOOLS_METRICS_NAMESPACE }}
+        TF_VAR_lambda_notification_email_cognito_user_pool: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_COGNITO_USER_POOL }}
+        TF_VAR_lambda_notification_email_aws_region: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_AWS_REGION }}
+        TF_VAR_lambda_notification_email_from_email: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_FROM_EMAIL }}
+        TF_VAR_lambda_notification_email_logo_url: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_LOGO_URL }}
+        TF_VAR_lambda_notification_email_dashboard_url: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_DASHBOARD_URL }}
+        TF_VAR_lambda_notification_email_timezone: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_TIMEZONE }}
+        TF_VAR_lambda_notification_email_template: ${{ vars.LAMBDA_NOTIFICATION_EMAIL_TEMPLATE }}
+        TF_VAR_lambda_url_generator_aws_region: ${{ vars.LAMBDA_URL_GENERATOR_AWS_REGION }}
+        TF_VAR_lambda_url_generator_s3_signature_version: ${{ vars.LAMBDA_URL_GENERATOR_S3_SIGNATURE_VERSION }}
+        TF_VAR_lambda_url_generator_s3_bucket_name: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_NAME }}
+        TF_VAR_lambda_url_generator_s3_url_download_expiration: ${{ vars.LAMBDA_URL_GENERATOR_S3_URL_DOWNLOAD_EXPIRATION }}
+        TF_VAR_lambda_url_generator_s3_url_upload_expiration: ${{ vars.LAMBDA_URL_GENERATOR_S3_URL_UPLOAD_EXPIRATION }}
+        TF_VAR_lambda_url_generator_s3_bucket_dir_uploads: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_DIR_UPLOADS }}
+        TF_VAR_lambda_url_generator_s3_bucket_dir_finished: ${{ vars.LAMBDA_URL_GENERATOR_S3_BUCKET_DIR_FINISHED }}
       run: terraform apply -refresh-only -var-file="prd.tfvars" -auto-approve
