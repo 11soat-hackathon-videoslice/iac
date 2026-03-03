@@ -62,7 +62,6 @@ dynamodb_tags = {
 
 apigw_api_name                     = "vdsc-prd-api"
 apigw_authorizer_name              = "vdsc-prd-api-authorizer"
-apigw_cognito_user_pool_arn        = "arn:aws:cognito-idp:us-east-1:080145351546:userpool/us-east-1_D05wBn3u7"
 apigw_stage_name                   = "prd"
 apigw_disable_execute_api_endpoint = false
 apigw_tags                         = {}
@@ -383,7 +382,6 @@ appsync_api_name             = "vdsc-prd-notification-web-appsync"
 appsync_authentication_type  = "API_KEY"
 appsync_introspection_config = "ENABLED"
 appsync_xray_enabled         = false
-appsync_cognito_user_pool_id = "us-east-1_D05wBn3u7"
 appsync_cognito_aws_region   = "us-east-1"
 appsync_tags = {
   vdsc = ""

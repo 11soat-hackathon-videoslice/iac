@@ -60,15 +60,62 @@ module "dynamodb" {
 #                          API GATEWAY MODULE                                            #
 #========================================================================================#
 
+# IAM Role for API Gateway to access DynamoDB
+resource "aws_iam_role" "api_gateway_role" {
+  name = "${local.prefix_name}-api-gateway-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = var.apigw_tags
+}
+
+# IAM Policy for API Gateway to access DynamoDB
+resource "aws_iam_role_policy" "api_gateway_dynamodb_policy" {
+  name = "${local.prefix_name}-api-gateway-dynamodb-policy"
+  role = aws_iam_role.api_gateway_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:Query"
+        ]
+        Resource = [
+          module.dynamodb.video_slice_table_arn,
+          "${module.dynamodb.video_slice_table_arn}/index/*"
+        ]
+      }
+    ]
+  })
+}
+
 module "api_gateway" {
   source = "./modules/api-gateway"
 
-  api_name                     = var.apigw_api_name
-  authorizer_name              = var.apigw_authorizer_name
-  cognito_user_pool_arn        = var.apigw_cognito_user_pool_arn
-  stage_name                   = var.apigw_stage_name
-  disable_execute_api_endpoint = var.apigw_disable_execute_api_endpoint
-  tags                         = var.apigw_tags
+  api_name                         = var.apigw_api_name
+  authorizer_name                  = var.apigw_authorizer_name
+  cognito_user_pool_arn            = module.cognito.user_pool_arn
+  stage_name                       = var.apigw_stage_name
+  disable_execute_api_endpoint     = var.apigw_disable_execute_api_endpoint
+  lambda_url_generator_arn         = module.lambda.lambda_function_arns["url-generator"]
+  lambda_url_generator_invoke_arn  = module.lambda.lambda_function_invoke_arns["url-generator"]
+  dynamodb_table_name              = module.dynamodb.video_slice_table_name
+  api_gateway_role_arn             = aws_iam_role.api_gateway_role.arn
+  tags                             = var.apigw_tags
 }
 
 
@@ -137,16 +184,65 @@ module "sqs" {
 #                                 APPSYNC MODULE                                        #
 #========================================================================================#
 
+# IAM Role for AppSync to access DynamoDB
+resource "aws_iam_role" "appsync_service_role" {
+  name = "${local.prefix_name}-appsync-service-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "appsync.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = var.appsync_tags
+}
+
+# IAM Policy for AppSync to access DynamoDB
+resource "aws_iam_role_policy" "appsync_dynamodb_policy" {
+  name = "${local.prefix_name}-appsync-dynamodb-policy"
+  role = aws_iam_role.appsync_service_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ]
+        Resource = [
+          module.dynamodb.notification_web_table_arn,
+          "${module.dynamodb.notification_web_table_arn}/index/*"
+        ]
+      }
+    ]
+  })
+}
+
 module "appsync" {
   source = "./modules/appsync"
 
-  api_name             = var.appsync_api_name
-  authentication_type  = var.appsync_authentication_type
-  introspection_config = var.appsync_introspection_config
-  xray_enabled         = var.appsync_xray_enabled
-  cognito_user_pool_id = var.appsync_cognito_user_pool_id
-  cognito_aws_region   = var.appsync_cognito_aws_region
-  tags                 = var.appsync_tags
+  api_name                  = var.appsync_api_name
+  authentication_type       = var.appsync_authentication_type
+  introspection_config      = var.appsync_introspection_config
+  xray_enabled              = var.appsync_xray_enabled
+  cognito_user_pool_id      = module.cognito.user_pool_id
+  cognito_aws_region        = var.appsync_cognito_aws_region
+  appsync_service_role_arn  = aws_iam_role.appsync_service_role.arn
+  dynamodb_table_name       = module.dynamodb.notification_web_table_name
+  tags                      = var.appsync_tags
 }
 
 #========================================================================================#

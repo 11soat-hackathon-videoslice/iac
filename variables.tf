@@ -244,11 +244,6 @@ variable "apigw_authorizer_name" {
   description = "Name of the Cognito authorizer"
 }
 
-variable "apigw_cognito_user_pool_arn" {
-  type        = string
-  description = "ARN of the Cognito User Pool for authorization"
-}
-
 variable "apigw_stage_name" {
   type        = string
   description = "Name of the API Gateway stage"
@@ -539,11 +534,6 @@ variable "appsync_xray_enabled" {
   type        = bool
   description = "Enable X-Ray tracing"
   default     = false
-}
-
-variable "appsync_cognito_user_pool_id" {
-  type        = string
-  description = "Cognito User Pool ID for authentication"
 }
 
 variable "appsync_cognito_aws_region" {

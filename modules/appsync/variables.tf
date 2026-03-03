@@ -32,6 +32,16 @@ variable "cognito_aws_region" {
   default     = "us-east-1"
 }
 
+variable "appsync_service_role_arn" {
+  type        = string
+  description = "IAM role ARN for AppSync to access DynamoDB"
+}
+
+variable "dynamodb_table_name" {
+  type        = string
+  description = "DynamoDB table name for notifications"
+}
+
 variable "tags" {
   type        = map(string)
   description = "Tags to apply to resources"
